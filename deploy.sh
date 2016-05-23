@@ -1,5 +1,5 @@
 #!/bin/bash
-. ./config/oc-settings.sh
+. ./config/os-settings.sh
 
 oc login https://${OS_MASTER_IP}:8443 --username=admin --password=admin
 
