@@ -1,0 +1,2 @@
+- src: https://github.com/dynatrace-innovationlab/Ruxit-Agent-Ansible
+  name: Dynatrace.Ruxit-Agent
