@@ -29,8 +29,10 @@ Building runs entirely in Docker, which relieves you from setting up a build env
 
 #### Login as system:admin and grant rights to user *admin*
 
-oc login https://$MASTER_IP:8443 -u system:admin
+```
+oc login https://${OS_MASTER_IP}:8443 -u system:admin
 oc policy add-role-to-user cluster-admin admin
+```
 
 ### 1. Build
 
@@ -52,6 +54,10 @@ oc policy add-role-to-user cluster-admin admin
 ### 2. Deploy
 
 `./deploy.sh` deploys easyTravel on OpenShift.
+
+## Additional Resources
+
+
 
 ## License
 
