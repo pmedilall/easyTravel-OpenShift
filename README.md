@@ -60,7 +60,7 @@ We will be working on a better way to publicly expose easyTravel's Customer Fron
 ```
 oc get pods (gives e.g. easytravel-frontend-1-a4tli)
 oc port-forward easytravel-frontend-1-a4tli 32123:8080
-``
+```
 
 ## License
 
