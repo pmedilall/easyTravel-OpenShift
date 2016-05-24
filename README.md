@@ -53,7 +53,7 @@ oc policy add-role-to-user cluster-admin admin
 
 ### 2. Deploy
 
-`./deploy.sh` deploys easyTravel on OpenShift.
+`./deploy.sh` deploys easyTravel on OpenShift. Undo via `./clean.sh`.
 
 ## License
 
