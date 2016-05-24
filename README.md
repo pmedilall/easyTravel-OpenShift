@@ -55,6 +55,13 @@ oc policy add-role-to-user cluster-admin admin
 
 `./deploy.sh` deploys easyTravel on OpenShift. Undo via `./clean.sh`.
 
+We will be working on a better way to publicly expose easyTravel's Customer Frontend service. For now, please follow these steps to map the service's internal port `8080` to a port on your local host, e.g. `32123`, through which you can conveniently access easyTravel in your browser.
+
+```
+oc get pods (gives e.g. easytravel-frontend-1-a4tli)
+oc port-forward easytravel-frontend-1-a4tli 32123:8080
+``
+
 ## License
 
 Licensed under the MIT License. See the [LICENSE](https://github.com/dynatrace-innovationlab/easyTravel-OpenShift/blob/master/LICENSE) file for details.
