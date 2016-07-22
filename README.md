@@ -21,7 +21,7 @@ The following automated build and deployment process is based on these prerequis
 
 Building runs entirely in Docker, which relieves you from setting up a build environment first. If you don't have done so yet, go install [Docker](https://docs.docker.com/linux/step_one/) or the [Docker Toolbox](https://www.docker.com/products/docker-toolbox) now.
 
-2) The *deployment process* require access to an [OpenShift](https://www.openshift.com) environment. The [OpenShift CLI](https://docs.openshift.org/latest/cli_reference/get_started_cli.html) has to be installed. Configuration for deploying easyTravel on Cloud Foundry is stored in [config/oc-settings.sh](https://github.com/dynatrace-innovationlab/easyTravel-OpenShift/blob/master/config/oc-settings.sh). Adapt to suit your needs.
+2) The *deployment process* require access to an [OpenShift](https://www.openshift.com) environment. The [OpenShift CLI](https://docs.openshift.org/latest/cli_reference/get_started_cli.html) has to be installed. Configuration for deploying easyTravel on OpenShift is stored in [config/os-settings.sh](https://github.com/dynatrace-innovationlab/easyTravel-OpenShift/blob/master/config/os-settings.sh). Adapt to suit your needs.
 
 ## Build and Deploy easyTravel on OpenShift
 
@@ -48,12 +48,12 @@ oc policy add-role-to-user cluster-admin admin
     ├── loadgen/build
     │   └── loadgen.tar.gz
     └── mongodb/build
-        └── easyTravel-mongodb-db-noauth.tar.gz
+        └── easyTravel-mongodb-db.tar.gz
 ```
 
 ### 2. Deploy
 
-`./deploy.sh` deploys easyTravel on OpenShift. Undo via `./clean.sh`.
+`./deploy.sh` deploys easyTravel on OpenShift. Undo via `./clean.sh`.  Alternatively, you may use one of the [OpenShift Templates](https://docs.openshift.org/latest/dev_guide/templates.html) in the project's [templates](https://github.com/dynatrace-innovationlab/easyTravel-OpenShift/tree/master/templates) directory.
 
 We will be working on a better way to publicly expose easyTravel's Customer Frontend service. For now, please follow these steps to map the service's internal port `8080` to a port on your local host, e.g. `32123`, through which you can conveniently access easyTravel in your browser.
 
