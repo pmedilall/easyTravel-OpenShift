@@ -65,9 +65,9 @@ docker run -ti --rm \
   dynatrace/easytravel-loadgen
 ```
 
-## Monitoring easyTravel with the Dynatrace Platform
+## Monitoring easyTravel with Dynatrace
 
-Please refer to the tutorials folder on how to set up the Dynatrace Platform for OpenShift using Ansible.
+Please refer to the [tutorials section](https://github.com/dynatrace-innovationlab/easyTravel-OpenShift/tree/master/tutorials/) on how to set up Dynatrace for OpenShift using Ansible.
 
 ## License
 
