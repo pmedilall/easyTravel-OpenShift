@@ -1,7 +1,0 @@
----
-- hosts: tag_clusterid_dev
-  roles:
-  - role: Dynatrace.Ruxit-Agent
-    dynatrace_ruxit_agent_environment_id: 123
-    dynatrace_ruxit_agent_tenant_token: abc
-  sudo: yes

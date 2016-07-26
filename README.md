@@ -15,11 +15,11 @@ This project deploys the [Dynatrace easyTravel](https://community.dynatrace.com/
 
 ## Prerequisites
 
-1. Access to an [OpenShift](https://www.openshift.com) environment is required.
+1. Access to an [OpenShift](https://www.openshift.com) environment is required. If you don't have a cluster up and running and are unsure on how to set one up, you can follow the tutorial in [README-deployOpenShiftWithAnsibleOnAWS.md](https://github.com/dynatrace-innovationlab/easyTravel-OpenShift/blob/master/README-deployOpenShiftOnAwsWithAnsible.md).
 2. The [OpenShift CLI](https://docs.openshift.org/latest/cli_reference/get_started_cli.html) has to be installed.
 3. Configuration for deploying easyTravel on OpenShift is stored in [config/os-settings.sh](https://github.com/dynatrace-innovationlab/easyTravel-OpenShift/blob/master/config/os-settings.sh). Adapt to suit your needs.
 
-## easyTravel on OpenShift
+## Running easyTravel on OpenShift
 
 ### 0. Bootstrap
 
@@ -64,6 +64,10 @@ docker run -ti --rm \
   --env ET_BACKEND_URL='http://localhost:32124' \
   dynatrace/easytravel-loadgen
 ```
+
+## Monitoring easyTravel with the Dynatrace Platform
+
+Please refer to the tutorials folder on how to set up the Dynatrace Platform for OpenShift using Ansible.
 
 ## License
 
