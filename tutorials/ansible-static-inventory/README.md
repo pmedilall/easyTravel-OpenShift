@@ -43,7 +43,7 @@ With your cluster nodes identified, the only thing left to do is describe the de
 # 4. Run OneAgent deployment via Ansible
 
 ```
-ansible-playbook --private-key=PRIVATE_KEY_FILE --user=REMOTE_USER ansible-playbook.yml 
+ansible-playbook --private-key=PRIVATE_KEY_FILE --user=REMOTE_USER playbook.yml 
 ```
 
 - The `--private-key` option points Ansible to the private key file you created when provisioning your cluster in AWS.
