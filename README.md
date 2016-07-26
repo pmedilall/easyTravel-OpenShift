@@ -2,64 +2,67 @@
 
 ![easyTravel Logo](https://github.com/dynatrace-innovationlab/easyTravel-Builder/blob/images/easyTravel-logo.png)
 
-This project builds and deploys the [Dynatrace easyTravel](https://community.dynatrace.com/community/display/DL/Demo+Applications+-+easyTravel) demo application on [RedHat OpenShift](https://www.openshift.com).
+This project deploys the [Dynatrace easyTravel](https://community.dynatrace.com/community/display/DL/Demo+Applications+-+easyTravel) demo application on [RedHat OpenShift](https://www.openshift.com).
 
 ## Application Components
 
-| Component | Component
-|:----------|:---------
-| mongodb   | A pre-populated travel database (MongoDB).
-| backend   | The easyTravel Business Backend (Java).
-| frontend  | The easyTravel Customer Frontend (Java).
-| loadgen   | A synthetic UEM load generator (Java).
+| Service             | Description
+|:--------------------|:-----------
+| easytravel-mongodb  | A pre-populated travel database (MongoDB).
+| easytravel-backend  | The easyTravel Business Backend (Java).
+| easytravel-frontend | The easyTravel Customer Frontend (Java).
+| easytravel-www      | A reverse-proxy for the easyTravel Customer Frontend (NGINX).
 
 ## Prerequisites
 
-The following automated build and deployment process is based on these prerequisites:
+1. Access to an [OpenShift](https://www.openshift.com) environment is required.
+2. The [OpenShift CLI](https://docs.openshift.org/latest/cli_reference/get_started_cli.html) has to be installed.
+3. Configuration for deploying easyTravel on OpenShift is stored in [config/os-settings.sh](https://github.com/dynatrace-innovationlab/easyTravel-OpenShift/blob/master/config/os-settings.sh). Adapt to suit your needs.
 
-1) The *build process* depends on the [easyTravel-Builder](https://github.com/dynatrace-innovationlab/easyTravel-Builder) project as a *git submodule*. To obtain the entire codebase, either clone the project recursively via `git clone --recursive` or download a source distribution release from [here](https://github.com/dynatrace-innovationlab/easyTravel-Builder/releases). Configuration for building easyTravel is stored in [config/app-settings.sh](https://github.com/dynatrace-innovationlab/easyTravel-OpenShift/blob/master/config/app-settings.sh). Adapt to suit your needs.
+## easyTravel on OpenShift
 
-Building runs entirely in Docker, which relieves you from setting up a build environment first. If you don't have done so yet, go install [Docker](https://docs.docker.com/linux/step_one/) or the [Docker Toolbox](https://www.docker.com/products/docker-toolbox) now.
+### 0. Bootstrap
 
-2) The *deployment process* require access to an [OpenShift](https://www.openshift.com) environment. The [OpenShift CLI](https://docs.openshift.org/latest/cli_reference/get_started_cli.html) has to be installed. Configuration for deploying easyTravel on OpenShift is stored in [config/os-settings.sh](https://github.com/dynatrace-innovationlab/easyTravel-OpenShift/blob/master/config/os-settings.sh). Adapt to suit your needs.
-
-## Build and Deploy easyTravel on OpenShift
-
-### 0. Bootstrap OpenShift
-
-#### Login as *system:admin* and grant rights to user *admin*
+Login as *system:admin* and grant rights to user *admin* via:
 
 ```
 oc login https://${OS_MASTER_IP}:8443 -u system:admin
-oc policy add-role-to-user cluster-admin admin
+oc new-project easytravel
+oc adm policy add-role-to-user cluster-admin admin -n easytravel
+oc adm policy add-scc-to-user anyuid -z default -n easytravel
 ```
 
-### 1. Build
+### 1. Deploy
 
-`./build.sh` creates the required deployment artefacts in `./build`.
+`./deploy.sh` deploys easyTravel on OpenShift. Undo via `./clean.sh`.
 
-```
-.
-├── build
-    ├── backend/build
-    │   └── backend.war
-    ├── frontend/build
-    │   └── frontend.war
-    ├── loadgen/build
-    │   └── loadgen.tar.gz
-    └── mongodb/build
-        └── easyTravel-mongodb-db.tar.gz
-```
+### 2. Expose Services
 
-### 2. Deploy
-
-`./deploy.sh` deploys easyTravel on OpenShift. Undo via `./clean.sh`.  Alternatively, you may use one of the [OpenShift Templates](https://docs.openshift.org/latest/dev_guide/templates.html) in the project's [templates](https://github.com/dynatrace-innovationlab/easyTravel-OpenShift/tree/master/templates) directory.
-
-We will be working on a better way to publicly expose easyTravel's Customer Frontend service. For now, please follow these steps to map the service's internal port `8080` to a port on your local host, e.g. `32123`, through which you can conveniently access easyTravel in your browser.
+- Configure a [route](https://docs.openshift.com/enterprise/latest/dev_guide/routes.html) in OpenShift to expose easyTravel services to the public (provided you have configured a domain for OpenShift).
+- Alternatively, you can map a pod's port to your local host via the `oc port-foward` command. The following example maps the `easytravel-www-123abc` pod's cluster internal port `80` to your local host's port `32123`. A list of available pod names is provided via `oc get pods`.
 
 ```
-oc get pods (gives e.g. easytravel-frontend-1-a4tli)
-oc port-forward easytravel-frontend-1-a4tli 32123:8080
+oc get pods (gives e.g. easytravel-www-123abc)
+oc port-forward easytravel-www-123abc 32123:80
+```
+
+### 3. Apply Synthetic Load
+
+With the `easytravel-www` service being exposed, you can apply synthetic load using the *UEM Load Generator* component from our [easyTravel-Docker](https://github.com/dynatrace-innovationlab/easyTravel-Docker) project. Suppose the service has been made available on `http://localhost:32123`:
+
+```
+docker run -ti --rm \
+  --env ET_FRONTEND_URL='http://localhost:32123' \
+  dynatrace/easytravel-loadgen
+```
+
+By additionally exposing the `easytravel-backend` service and providing its URL through `ET_BACKEND_URL`, the *UEM Load Generator* component will continually apply problems from an initial set of easyTravel problem patterns, as described [here](https://github.com/dynatrace-innovationlab/easyTravel-Docker). Suppose the service has been made available on `http://localhost:32124`:
+
+```
+docker run -ti --rm \
+  --env ET_FRONTEND_URL='http://localhost:32123' \
+  --env ET_BACKEND_URL='http://localhost:32124' \
+  dynatrace/easytravel-loadgen
 ```
 
 ## License
