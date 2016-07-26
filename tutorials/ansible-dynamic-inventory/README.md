@@ -20,7 +20,7 @@ ansible-galaxy install Dynatrace.OneAgent -p roles
 
 Edit the file `playbook.yml` and provide a selector that applies to all cluster nodes that shall contain Dynatrace OneAgent. One possibility is to select nodes by resource tags: a selector `tag_NAME_VALUE` will select all nodes that have a tag named `NAME` with a value of `VALUE`. For other options, please refer to Ansible's documentation on [Dynamic Inventories](http://docs.ansible.com/ansible/intro_dynamic_inventory.html).
 
-Example: in our development cluster, our nodes are tagged by `name=clusterid` and `value=openshift-dev`, so that selector effectively becomes `tag_clusterid_openshift_dev` (as above documentation states, special characters are converted to underscores):
+Example: in our development cluster, our nodes are tagged by `name=clusterid` and `value=openshift-dev` so that selector effectively becomes `tag_clusterid_openshift-dev`:
 
 ```
 ---
