@@ -2,7 +2,13 @@
 
 These instructions assume that you have basic knowledge of Ansible, a simple yet extremely powerful IT automation tool that has been making our lives at Dynatrace easier since its earliest days. You’ll use Ansible to automatically roll out Dynatrace OneAgent to the nodes of an OpenShift cluster.
 
-## 1. Obtain our Ansible role for the Dynatrace OneAgent
+## 1. Create your Dynatrace account
+
+If you are new to Dynatrace, sign up for your free trial at [http://www.dynatrace.com](http://www.dynatrace.com) and take note of your assigned environment ID and token values (shown below):
+
+![Dynatrace Environment](https://github.com/dynatrace-innovationlab/easyTravel-OpenShift/blob/images/dynatrace-environment.png)
+
+## 2. Obtain our Ansible role for the Dynatrace OneAgent
 
 The following command installs OneAgent with the role Dynatrace.OneAgent into the roles subdirectory within your current working directory:
 
@@ -10,7 +16,7 @@ The following command installs OneAgent with the role Dynatrace.OneAgent into th
 ansible-galaxy install Dynatrace.OneAgent -p roles
 ```
 
-## 2. Describe your cluster nodes via EC2 resource tags
+## 3. Describe your cluster nodes via EC2 resource tags
 
 Edit the file `playbook.yml` and provide a selector that applies to all cluster nodes that shall contain Dynatrace OneAgent. One possibility is to select nodes by resource tags: a selector `tag_NAME_VALUE` will select all nodes that have a tag named `NAME` with a value of `VALUE`. For other options, please refer to Ansible's documentation on [Dynamic Inventories](http://docs.ansible.com/ansible/intro_dynamic_inventory.html).
 
@@ -24,7 +30,7 @@ Example: in our development cluster, our nodes are tagged by `name=clusterid` an
     ...
 ```
 
-# 3. Define OneAgent deployment with an Ansible Playbook
+# 4. Define OneAgent deployment with an Ansible Playbook
 
 With your cluster nodes identified, the only thing left to do is describe the deployment of OneAgent within the Ansible playbook in `playbook.yml`:
 
@@ -37,7 +43,7 @@ With your cluster nodes identified, the only thing left to do is describe the de
     dynatrace_oneagent_tenant_token: YOUR_TENANT_TOKEN
 ```
 
-# 4. Run OneAgent deployment via Ansible
+# 5. Run OneAgent deployment via Ansible
 
 ```
 ansible-playbook --private-key=PRIVATE_KEY_FILE --user=REMOTE_USER ansible-playbook.yml 
@@ -46,9 +52,9 @@ ansible-playbook --private-key=PRIVATE_KEY_FILE --user=REMOTE_USER ansible-playb
 - The `--private-key` option points Ansible to the private key file you created when provisioning your cluster in AWS.
 - The `--user` option tells Ansible which user to use when connecting remotely to your cluster nodes. In case of OpenShift Origin, you would set this to `centos`.
 
-# 5. Start your OpenShift applications
+# 6. Start your OpenShift applications
 
-Once Ruxit Agent has been deployed to your cluster you simply start your OpenShift application as you normally would — the Dynatrace Platform will take care of the monitoring:
+Once Ruxit Agent has been deployed to your cluster you simply start your OpenShift application as you normally would — Dynatrace will take care of the monitoring:
 
 ```
 oc new-app .
