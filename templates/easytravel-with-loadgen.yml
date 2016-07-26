@@ -113,7 +113,6 @@ objects:
       env:
       - name: ET_FRONTEND_URL
         value: http://easytravel-frontend:8080
-      env:
       - name: ET_BACKEND_URL
         value: http://easytravel-backend:8080
 - apiVersion: v1
