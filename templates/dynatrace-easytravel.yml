@@ -22,7 +22,7 @@ objects:
       spec:
         containers:
         - name: easytravel-mongodb
-          image: dynatrace/easytravel-mongodb:openshift
+          image: dynatrace/easytravel-mongodb
           ports:
           - containerPort: 27017
             protocol: TCP
@@ -45,7 +45,7 @@ objects:
       spec:
         containers:
         - name: easytravel-backend
-          image: dynatrace/easytravel-backend:openshift
+          image: dynatrace/easytravel-backend
           env:
           - name: ET_DATABASE_LOCATION
             value: easytravel-mongodb:27017
@@ -69,12 +69,36 @@ objects:
       spec:
         containers:
         - name: easytravel-frontend
-          image: dynatrace/easytravel-frontend:openshift
+          image: dynatrace/easytravel-frontend
           env:
           - name: ET_BACKEND_URL
             value: http://easytravel-backend:8080
           ports:
           - containerPort: 8080
+            protocol: TCP
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: easytravel-www
+    labels:
+      app: easytravel-www
+  spec:
+    selector:
+      app: easytravel-www
+    template:
+      metadata:
+        name: easytravel-www
+        labels:
+          app: easytravel-www
+      spec:
+        containers:
+        - name: easytravel-nginx
+          image: dynatrace/easytravel-nginx
+          env:
+          - name: ET_FRONTEND_LOCATION
+            value: easytravel-frontend:8080
+          ports:
+          - containerPort: 80
             protocol: TCP
 - apiVersion: v1
   kind: Service
@@ -124,4 +148,19 @@ objects:
       targetPort: 8080
     selector:
       app: easytravel-frontend
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: easytravel-www
+    labels:
+      app: easytravel-www
+  spec:
+    ports:
+    - name: 80-tcp
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: easytravel-www
     type: ClusterIP
