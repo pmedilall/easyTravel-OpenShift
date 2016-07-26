@@ -112,7 +112,7 @@ objects:
       image: dynatrace/easytravel-loadgen
       env:
       - name: ET_FRONTEND_URL
-        value: http://easytravel-frontend:8080
+        value: http://easytravel-www:80
       - name: ET_BACKEND_URL
         value: http://easytravel-backend:8080
 - apiVersion: v1
