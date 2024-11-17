@@ -1,9 +1,9 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: dynatrace-easytravel
+  name: easytravel
   labels:
-    name: dynatrace-easytravel
+    name: easytravel
 objects:
 - apiVersion: v1
   kind: ReplicationController
